@@ -1,7 +1,7 @@
 # docker-airconnect
-AirConnect container for turning Chromecast into Airplay targets
-On DockerHub: https://hub.docker.com/r/1activegeek/airconnect
-On GitHub: https://github.com/1activegeek/docker-airconnect
+AirConnect container for turning Chromecast into Airplay targets  
+On DockerHub: https://hub.docker.com/r/1activegeek/airconnect  
+On GitHub: https://github.com/1activegeek/docker-airconnect  
 
 This is a containerized build of the fantastics program by [philippe44](https://github.com/philippe44) called AirConnect. It allows you to be able to use AirPlay to push audio to Chromecast and UPNP based devices. There are some advanced details and information that you should review on his [GitHub Project](https://github.com/philippe44/AirConnect). For the most part this container needs nothing more than to launch it using Host networking.
 
