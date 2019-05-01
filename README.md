@@ -15,6 +15,12 @@ Sample Docker run config:
 
 `docker run -d --net=host 1activegeek/airconnect`
 
+I've introduced a secondary function as well in case you'd like to run the container with specifc runtime variables appended to the run config. This includes things such as the examples below in the troubleshooting section. It's purpose is more aimed at folks who'd like to use a custom configuration file for example, which requires running with `-x <name of file>` to be able to run this config.
+
+To utilize this, please use the following environment variables when you run the container:
+- `AIRCAST_VAR` This will be for variables to send to the aircast runtime used for integration with Chromecast based devices
+- `AIRUPNP_VAR` This will be for variables to send to the airupnp runtime used for integration with Sonos and UPnP based devices
+
 # Troubleshooting
 
 If you need to attempt to dig into troubleshooting and see the logs realtime in the container, use the following examples to help dig into diagnosis.
@@ -31,4 +37,6 @@ If you perform any realtime testing, it is suggested to completely restart the c
 
 <p>
 <p>
-<a href="https://www.buymeacoffee.com/1activegeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>  If you like what I've created, please consider contributing
+<a href="https://www.buymeacoffee.com/1activegeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+If you like what I've created, please consider contributing
