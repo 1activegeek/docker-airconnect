@@ -20,6 +20,26 @@ I've introduced a secondary function as well in case you'd like to run the conta
 To utilize this, please use the following environment variables when you run the container:
 - `AIRCAST_VAR` This will be for variables to send to the aircast runtime used for integration with Chromecast based devices
 - `AIRUPNP_VAR` This will be for variables to send to the airupnp runtime used for integration with Sonos and UPnP based devices
+  - **If you alter this variable you need to add in `-l 1000:2000` per the devs notes for Sonos/Heos players. If you don't alter the variable, I include this by default in the docker files**
+
+### Runtime Commands
+
+```
+Usage: [options]
+  -b <address>        network address to bind to
+  -c <mp3[:<rate>]|flc[:0..9]|wav>    audio format send to player
+  -x <config file>    read config from file (default is ./config.xml)
+  -i <config file>    discover players, save <config file> and exit
+  -I             auto save config at every network scan
+  -l <[rtp][:http][:f]>    RTP and HTTP latency (ms), ':f' forces silence fill
+  -r             let timing reference drift (no click)
+  -f <logfile>        Write debug to logfile
+  -p <pid file>        write PID in file
+  -d <log>=<level>    Set logging level, logs: all|raop|main|util|cast, level: error|warn|info|debug|sdebug
+  -Z             NOT interactive
+  -k             Immediate exit on SIGQUIT and SIGTERM
+  -t             License terms
+```
 
 # Troubleshooting
 
