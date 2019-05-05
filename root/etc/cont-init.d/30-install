@@ -5,5 +5,5 @@ wget -O /bin/airupnp-x86-64 https://raw.githubusercontent.com/philippe44/AirConn
 wget -O /bin/aircast-x86-64 https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/aircast-x86-64 && chmod +x /bin/aircast-x86-64
 
 # Insert runtime commands if users has entered them as environment variables
-[ -z "${AIRUPNP_VAR}" ] || sed 's/airupnp-x86-64 -l 1000:2000/airupnp-x86-64 '"$AIRUPNP_VAR"'/' /etc/supervisord.conf
-[ -z "${AIRCAST_VAR}" ] || sed 's/aircast-x86-64/aircast-x86-64 '"$AIRCAST_VAR"'/' /etc/supervisord.conf
+[ -z "$AIRUPNP_VAR" ] || sed 's/airupnp-x86-64 -l 1000:2000/airupnp-x86-64 '"$AIRUPNP_VAR"'/' /etc/supervisord.conf
+[ -z "$AIRCAST_VAR" ] || sed 's/aircast-x86-64/aircast-x86-64 '"$AIRCAST_VAR"'/' /etc/supervisord.conf
