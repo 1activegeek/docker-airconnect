@@ -3,3 +3,7 @@
 # Grab latest versions of the app
 wget -O /bin/airupnp-x86-64 https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-x86-64 && chmod +x /bin/airupnp-x86-64
 wget -O /bin/aircast-x86-64 https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/aircast-x86-64 && chmod +x /bin/aircast-x86-64
+
+# Insert runtime commands if users has entered them as environment variables
+[ -z "$AIRUPNP_VAR" ] || sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-x86-64 '"$AIRUPNP_VAR"';' /etc/supervisord.conf
+[ -z "$AIRCAST_VAR" ] || sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-x86-64 '"$AIRCAST_VAR"';' /etc/supervisord.conf
