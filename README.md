@@ -26,7 +26,7 @@ To utilize this, please use the following environment variables when you run the
 
 ```
 Usage: [options]
-  -b <address>        network address to bind to
+  -b < address>        network address to bind to
   -c <mp3[:<rate>]|flc[:0..9]|wav>    audio format send to player
   -x <config file>    read config from file (default is ./config.xml)
   -i <config file>    discover players, save <config file> and exit
