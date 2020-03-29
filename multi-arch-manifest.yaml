@@ -4,10 +4,11 @@ manifests:
     platform:
       architecture: amd64
       os: linux
-  - image: web2brain/airconnect:i686
+  - image: web2brain/airconnect:arm64
     platform:
-      architecture: i386
+      architecture: arm64
       os: linux
+      variant: v8
   - image: web2brain/airconnect:arm
     platform:
       architecture: arm
