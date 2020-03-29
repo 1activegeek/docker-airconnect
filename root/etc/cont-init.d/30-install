@@ -1,8 +1,15 @@
 #!/usr/bin/with-contenv bash
 
+# Set arch
+if [ "$HOSTTYPE" = "arm" ]; then
+  arc="arm"
+else
+  arc="x86-64"
+fi
+
 # Grab latest versions of the app
-wget -O /bin/airupnp https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-arm && chmod +x /bin/airupnp
-wget -O /bin/aircast https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/aircast-arm && chmod +x /bin/aircast
+wget -O /bin/airupnp https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-${arc} && chmod +x /bin/airupnp
+wget -O /bin/aircast https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/aircast-${arc} && chmod +x /bin/aircast
 
 # Insert runtime commands if users has entered them as environment variables
 [ -z "$AIRUPNP_VAR" ] || sed -i 's;command=/bin/airupnp -l 1000:2000;command=/bin/airupnp '"$AIRUPNP_VAR"';' /etc/supervisord.conf
