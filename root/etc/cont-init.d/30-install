@@ -3,6 +3,10 @@
 # Set arch
 if [ "$HOSTTYPE" = "arm" ]; then
   arc="arm"
+elif [ "$HOSTTYPE" = "arm64" ]; then
+  arc="aarch64"
+elif [ "$HOSTTYPE" = "i686" ]; then
+  arc="x86"
 else
   arc="x86-64"
 fi
