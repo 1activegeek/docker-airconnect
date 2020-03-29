@@ -1,0 +1,20 @@
+image: web2brain/docker-airconnect:latest
+manifests:
+  - image: web2brain/docker-airconnect:amd64
+    platform:
+      architecture: amd64
+      os: linux
+  - image: web2brain/docker-airconnect:i386
+    platform:
+      architecture: i386
+      os: linux
+  - image: web2brain/docker-airconnect:arm32v7
+    platform:
+      architecture: arm
+      os: linux
+      variant: v7
+  - image: web2brain/docker-airconnect:arm64v8
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
