@@ -1,0 +1,20 @@
+image: web2brain/airconnect:latest
+manifests:
+  - image: web2brain/airconnect:amd64
+    platform:
+      architecture: amd64
+      os: linux
+  - image: web2brain/airconnect:i686
+    platform:
+      architecture: i386
+      os: linux
+  - image: web2brain/airconnect:arm
+    platform:
+      architecture: arm
+      os: linux
+      variant: v7
+  - image: web2brain/airconnect:arm64
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
