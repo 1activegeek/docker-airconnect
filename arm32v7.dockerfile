@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:arm32v7-latest
+FROM lsiobase/ubuntu:bionic
 
 # Add Supervisor
 RUN apt-get update && apt-get install -y \
