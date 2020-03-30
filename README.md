@@ -13,7 +13,7 @@ This can be run using a docker compose file or a standard docker run command.
 
 Sample Docker run config:
 
-`docker run -d --net=host 1activegeek/airconnect`
+`docker run -d --net=host web2brain/airconnect`
 
 I've introduced a secondary function as well in case you'd like to run the container with specifc runtime variables appended to the run config. This includes things such as the examples below in the troubleshooting section. It's purpose is more aimed at folks who'd like to use a custom configuration file for example, which requires running with `-x <name of file>` to be able to run this config.
 
