@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:amd64-bionic
+FROM amd64/lsiobase/ubuntu:bionic
 
 # Add Supervisor
 RUN apt-get update && apt-get install -y \
