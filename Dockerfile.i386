@@ -1,16 +1,7 @@
-FROM alpine AS builder
-
-# QEMU Download
-ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-aarch64.tar.gz
-RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
-
-FROM arm64v8/debian:stable-slim
-
-# Add QEMU
-COPY --from=builder qemu-aarch64-static /usr/bin
+FROM i386/debian:stable-slim
 
 ARG OVERLAY_VERSION="v1.22.1.0"
-ARG OVERLAY_ARCH="aarch64"
+ARG OVERLAY_ARCH="x86"
 
 # Add Supervisor and S6 Overlay
 RUN apt-get update && apt-get -y install gnupg wget supervisor && apt-get clean
