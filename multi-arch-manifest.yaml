@@ -1,16 +1,25 @@
 image: web2brain/airconnect:latest
 manifests:
-  - image: web2brain/airconnect:amd64
+  - image: web2brain/airconnect:arm32v5
     platform:
-      architecture: amd64
+      architecture: arm
       os: linux
-  - image: web2brain/airconnect:arm64
-    platform:
-      architecture: arm64
-      os: linux
-      variant: v8
-  - image: web2brain/airconnect:arm
+      variant: v5
+  - image: web2brain/airconnect:arm32v7
     platform:
       architecture: arm
       os: linux
       variant: v7
+  - image: web2brain/airconnect:arm64v8
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
+  - image: web2brain/airconnect:i386
+    platform:
+      architecture: 386
+      os: linux
+  - image: web2brain/airconnect:amd64
+    platform:
+      architecture: amd64
+      os: linux
