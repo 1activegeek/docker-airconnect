@@ -1,13 +1,17 @@
-#!/usr/bin/with-contenv bash
+#!/bin/bash
 
 # Set arch
-if [ "$HOSTTYPE" = "arm" ]; then
+echo "HOSTTYPE is $HOSTTYPE"
+if [[ "$HOSTTYPE" =~ ^(arm|armv7)$ ]]; then
   arc="arm"
-elif [ "$HOSTTYPE" = "arm64" ]; then
+elif [ "$HOSTTYPE" == "arm64" ]; then
   arc="aarch64"
+elif [[ "$HOSTTYPE" =~ ^(x86|386|i386)$ ]]; then
+  arc="x86"
 else
   arc="x86-64"
 fi
+echo "Chosen architecture is $arc"
 
 # Grab latest versions of the app
 wget -O /bin/airupnp https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/airupnp-${arc} && chmod +x /bin/airupnp
