@@ -4,6 +4,8 @@
 echo "HOSTTYPE is $HOSTTYPE"
 if [[ "$HOSTTYPE" =~ ^(arm|armv7)$ ]]; then
   arc="arm"
+elif [ "$HOSTTYPE" == "armv5" ]; then
+  arc="arm5"
 elif [ "$HOSTTYPE" == "arm64" ]; then
   arc="aarch64"
 elif [[ "$HOSTTYPE" =~ ^(x86|386|i386)$ ]]; then
