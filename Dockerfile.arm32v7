@@ -10,7 +10,7 @@ FROM arm32v7/debian:stable-slim
 COPY --from=builder qemu-arm-static /usr/bin
 
 ARG OVERLAY_VERSION="v1.22.1.0"
-ARG OVERLAY_ARCH="arm"
+ARG OVERLAY_ARCH="armhf"
 ENV DOCKER_HOSTTYPE="arm32v7"
 
 # Add Supervisor and S6 Overlay
