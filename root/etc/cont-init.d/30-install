@@ -1,8 +1,5 @@
 #!/usr/bin/with-contenv bash
 
-echo "Setting arch variable to x86-64 if not entered for standard operation"
-[ -z "$ARCH_VAR" ] && ARCH_VAR="x86-64"
-
 echo "Checking for valid arch options"
 case $ARCH_VAR in
   x86-64)
@@ -11,15 +8,10 @@ case $ARCH_VAR in
   aarch64)
     echo "Proceeding with aarch64 arch"
     ;;
-  arm5)
-    echo "Proceeding with arm5 arch"
-    ;;
   arm)
     echo "Proceeding with arm arch"
     ;;
   *)
-    echo "Unrecognized or invalid arch selection, canceling install"
-    echo "Unrecognized or invalid arch selection, canceling install"
     echo "Unrecognized or invalid arch selection, canceling install"
     exit 1
     ;;
