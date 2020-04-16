@@ -1,5 +1,5 @@
 name: Multi-Arch Build
-on: [push, pull_request]
+on:
   push:
     branches:
       - master
