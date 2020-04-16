@@ -28,8 +28,8 @@ wget -O /bin/airupnp-$ARCH_VAR https://raw.githubusercontent.com/philippe44/AirC
 wget -O /bin/aircast-$ARCH_VAR https://raw.githubusercontent.com/philippe44/AirConnect/master/bin/aircast-$ARCH_VAR && chmod +x /bin/aircast-$ARCH_VAR
 
 # Insert runtime commands if users has entered them as environment variables
-[ -z "$AIRUPNP_VAR" ] || sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
-[ -z "$AIRCAST_VAR" ] || sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
+[ -z "$AIRUPNP_VAR" ] && sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR"' -l 1000:2000;' /etc/supervisord.conf || sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
+[ -z "$AIRCAST_VAR" ] && sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf || sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
 
 # Adjusting process names in supervisord
 if [ "$ARCH_VAR" != "x86-64" ] ; then sed -i 's;process_name = airupnp-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
