@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-echo "Empty arch variable found, setting arch variable to x86-64 for standard operation"
+echo "Setting arch variable to x86-64 if not entered for standard operation"
 [ -z "$ARCH_VAR" ] && ARCH_VAR="x86-64"
 
 echo "Checking for valid arch options"
@@ -19,6 +19,8 @@ case $ARCH_VAR in
     ;;
   *)
     echo "Unrecognized or invalid arch selection, canceling install"
+    echo "Unrecognized or invalid arch selection, canceling install"
+    echo "Unrecognized or invalid arch selection, canceling install"
     exit 1
     ;;
 esac
@@ -32,5 +34,5 @@ wget -O /bin/aircast-$ARCH_VAR https://raw.githubusercontent.com/philippe44/AirC
 [ -z "$AIRCAST_VAR" ] && sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf || sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
 
 # Adjusting process names in supervisord
-if [ "$ARCH_VAR" != "x86-64" ] ; then sed -i 's;process_name = airupnp-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
-if [ "$ARCH_VAR" != "x86-64" ] ; then sed -i 's;process_name = aircast-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
+[ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = airupnp-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
+[ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = aircast-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
