@@ -1,0 +1,90 @@
+name: Multi-Arch Build
+on:
+  push:
+    branches:
+      - develop
+      - arch-fix
+  pull_request:
+    branches:
+      - develop
+      - arch-fix
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      BUILDKIT_HOST: tcp://0.0.0.0:1234
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      DOCKER_IMAGE: airconnect
+      DOCKER_TAG: dev
+      DOCKER_USER: 1activegeek
+      PLATFORM_1: amd64
+      PLATFORM_2: arm
+      PLATFORM_3: arm64
+      REPO: 1activegeek/airconnect
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Getting buildkit
+      run: |
+        sudo docker run --privileged linuxkit/binfmt:v0.7
+        sudo docker run -d --privileged -p 1234:1234 --name buildkit moby/buildkit:latest --addr tcp://0.0.0.0:1234 \
+        --oci-worker-platform linux/${PLATFORM_1} \
+        --oci-worker-platform linux/${PLATFORM_2} \
+        --oci-worker-platform linux/${PLATFORM_3}
+        sudo docker cp buildkit:/usr/bin/buildctl /usr/bin/
+
+    - name: Build amd64
+      env:
+        DOCKERFILE_LOCATION: ./Dockerfile
+      run: |
+        buildctl build --frontend dockerfile.v0 \
+        --opt platform=linux/${PLATFORM_1} \
+        --opt filename=./${DOCKERFILE_LOCATION} \
+        --output type=docker,name=${REPO}:${DOCKER_TAG}-${PLATFORM_1} \
+        --local dockerfile=. \
+        --local context=. | docker load
+
+    - name: Build armhf
+      env:
+        DOCKERFILE_LOCATION: ./Dockerfile.armhf
+      run: |
+        buildctl build --frontend dockerfile.v0 \
+        --frontend-opt platform=linux/${PLATFORM_2} \
+        --frontend-opt filename=./${DOCKERFILE_LOCATION} \
+        --output type=docker,name=${REPO}:${DOCKER_TAG}-${PLATFORM_2} \
+        --local dockerfile=. \
+        --local context=. | docker load
+
+    - name: Build arm64
+      env:
+        DOCKERFILE_LOCATION: ./Dockerfile.arm64
+      run: |
+        buildctl build --frontend dockerfile.v0 \
+        --frontend-opt platform=linux/${PLATFORM_3} \
+        --frontend-opt filename=./${DOCKERFILE_LOCATION} \
+        --output type=docker,name=${REPO}:${DOCKER_TAG}-${PLATFORM_3} \
+        --local dockerfile=. \
+        --local context=. | docker load
+
+    - name: Login to registry
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+
+    - name: Publish images
+      run: |
+        docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_1}
+        docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_2}
+        docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_3}
+    - name: Create manifest
+      run: |
+        docker manifest create ${DOCKER_USER}/${DOCKER_IMAGE}:${DOCKER_TAG} \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_1} \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_2} \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_3}
+        docker manifest push ${REPO}:${DOCKER_TAG}
+        docker manifest annotate ${REPO}:${DOCKER_TAG} ${REPO}:${DOCKER_TAG}-${PLATFORM_1} --arch ${PLATFORM_1}
+        docker manifest annotate ${REPO}:${DOCKER_TAG} ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
+        docker manifest annotate ${REPO}:${DOCKER_TAG} ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
+        docker manifest push ${REPO}:${DOCKER_TAG}

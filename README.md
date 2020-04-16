@@ -5,7 +5,7 @@ On GitHub: https://github.com/1activegeek/docker-airconnect
 
 This is a containerized build of the fantastics program by [philippe44](https://github.com/philippe44) called AirConnect. It allows you to be able to use AirPlay to push audio to Chromecast and UPNP based devices. There are some advanced details and information that you should review on his [GitHub Project](https://github.com/philippe44/AirConnect). For the most part this container needs nothing more than to launch it using Host networking.
 
-The main purpose for building this container over the others out there, is that this will always update to the latest version of the app as pulled from the original GitHub page. Currently there is another popular container that is not updated. This uses runtime scripting to ensure it will always pull the latest version of the binary before running - without intervention by me. It also uses the base image produced by the [LS.io team](https://github.com/linuxserver) to reduce footprint. 
+The main purpose for building this container over the others out there, is that this will always update to the latest version of the app as pulled from the original GitHub page. Currently there is another popular container that is not updated. This uses runtime scripting to ensure it will always pull the latest version of the binary before running - without intervention by me. It also uses the base image produced by the [LS.io team](https://github.com/linuxserver) to reduce footprint.
 
 # Running
 
@@ -21,6 +21,8 @@ To utilize this, please use the following environment variables when you run the
 - `AIRCAST_VAR` This will be for variables to send to the aircast runtime used for integration with Chromecast based devices
 - `AIRUPNP_VAR` This will be for variables to send to the airupnp runtime used for integration with Sonos and UPnP based devices
   - **If you alter this variable you need to add in `-l 1000:2000` per the devs notes for Sonos/Heos players. If you don't alter the variable, I include this by default in the docker files**
+
+Newly introduced is the ability to run this container on various architectures besides x86-64. Logic has been built in and created to allow for running on ARM and ARM64 based devices. There should not be anything specific needing to be done as multiple dockerfiles and automated build processes have been configured to handle this seamlessly. Simply choose the correct branch for your architecture from the Docker Hub. Note that this will alter the binary name from `aircast-x86-64` to `aircast-aarch64` or `aircast-arm` depending on your platform. Same for the `airupnp` binary as well.
 
 ### Runtime Commands
 
@@ -53,7 +55,7 @@ Once inside the container, you can use standard config options to run the app as
 
 `./aircast-x86-64 -d all=debug` - will run the app and output a debug based log in an interactive mode
 
-If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively. 
+If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
 <p>
 <p>
