@@ -49,7 +49,7 @@ jobs:
 
     - name: Build armhf
       env:
-        DOCKERFILE_LOCATION: ./Dockerfile
+        DOCKERFILE_LOCATION: ./Dockerfile.armhf
       run: |
         buildctl build --frontend dockerfile.v0 \
         --frontend-opt platform=linux/${PLATFORM_2} \
@@ -60,7 +60,7 @@ jobs:
 
     - name: Build arm64
       env:
-        DOCKERFILE_LOCATION: ./Dockerfile
+        DOCKERFILE_LOCATION: ./Dockerfile.aarch64
       run: |
         buildctl build --frontend dockerfile.v0 \
         --frontend-opt platform=linux/${PLATFORM_3} \
