@@ -55,3 +55,6 @@ fabric.properties
 
 .gitignore
 .idea/
+
+# Mac DS Stores
+.DS_Store
