@@ -1,3 +1,4 @@
+![Multi-Arch Build](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=master)
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
 On DockerHub: https://hub.docker.com/r/1activegeek/airconnect  
