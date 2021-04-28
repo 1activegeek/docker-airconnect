@@ -1,4 +1,11 @@
 ![Multi-Arch Build](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=master)
+
+If you like what I've created, please consider contributing:
+<br>
+<a href="https://www.paypal.com/paypalme/shawnmix/3"><img src="https://img.shields.io/badge/PayPal-Make%20a%20Donation-grey?style=for-the-badge&logo=paypal&labelColor=000000"></a>
+<br>
+<a href="https://www.buymeacoffee.com/1activegeek"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
+
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
 On DockerHub: https://hub.docker.com/r/1activegeek/airconnect  
@@ -61,5 +68,3 @@ If you perform any realtime testing, it is suggested to completely restart the c
 <p>
 <p>
 <a href="https://www.buymeacoffee.com/1activegeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-If you like what I've created, please consider contributing
