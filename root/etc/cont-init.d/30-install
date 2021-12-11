@@ -6,7 +6,7 @@ case $ARCH_VAR in
     echo "Proceeding with x86-64 arch"
     ;;
   amd64)
-    echo "Proceeding with amd64 arch as x86-64 for airconnect binary"
+    echo "Proceeding with x86-64 arch"
     ARCH_VAR="x86-64"
     ;;
   aarch64)
