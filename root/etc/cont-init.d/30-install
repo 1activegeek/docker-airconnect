@@ -5,6 +5,10 @@ case $ARCH_VAR in
   x86-64)
     echo "Proceeding with x86-64 arch"
     ;;
+  amd64)
+    echo "Proceeding with x86-64 arch"
+    ARCH_VAR="x86-64"
+    ;;
   aarch64)
     echo "Proceeding with aarch64 arch"
     ;;
