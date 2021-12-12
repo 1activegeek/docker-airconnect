@@ -28,5 +28,5 @@ esac
 [ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = aircast-x86-64;process_name = aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 
 # Adding logic to kill either process
-[ "$AIRUPNP_VAR" = "kill" ] && sed '4,7d' /etc/supervisord.conf
-[ "$AIRCAST_VAR" = "kill" ] && sed '9,12' /etc/supervisord.conf
+[ "$AIRUPNP_VAR" = "kill" ] && sed -i '4,7d' /etc/supervisord.conf
+[ "$AIRCAST_VAR" = "kill" ] && sed -i '9,12' /etc/supervisord.conf
