@@ -12,7 +12,9 @@ case $ARCH_VAR in
     echo "Proceeding with arm arch"
     ;;
   *)
-    echo "Unrecognized or invalid arch selection, canceling install"
+    echo "Unrecognized or invalid arch selection, CANCELING INSTALL"
+    echo "========== FAILURE DETECTED ========="
+    echo "YOUR CONTAINER WILL NOT WORK, PLEASE ADDRESS OR OPEN AN ISSUE"
     exit 1
     ;;
 esac

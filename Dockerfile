@@ -1,6 +1,7 @@
 FROM lsiobase/ubuntu:bionic
 
-ENV ARCH_VAR=amd64
+# Adding environment variable for binary download
+ENV ARCH_VAR=x86-64
 
 # Add Supervisor
 RUN apt-get update && apt-get install -y \

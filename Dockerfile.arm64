@@ -1,5 +1,6 @@
 FROM lsiobase/ubuntu:bionic
 
+# Adding environment variable for binary download
 ENV ARCH_VAR=aarch64
 
 # Add Supervisor
