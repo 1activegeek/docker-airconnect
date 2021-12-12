@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - master
-      - develop
-      - builder-fix
-  # pull_request:
-  #   branches:
-  #     - master
+      - dev
+  pull_request:
+    branches:
+      - master
   schedule:
     - cron: '0 2 * * 6'
 
