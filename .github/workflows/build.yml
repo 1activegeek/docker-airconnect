@@ -36,9 +36,11 @@ jobs:
 
           if [ "${{ github.ref }}" = "refs/heads/master" ]; then
             VERSION=latest
+          fi
 
           if [ "${{ github.event }}" = "schedule" ]; then
             VERSION=latest
+          fi
 
           TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           
