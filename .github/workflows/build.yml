@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - builder-fix
   # pull_request:
   #   branches:
   #     - master
