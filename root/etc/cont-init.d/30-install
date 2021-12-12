@@ -29,4 +29,4 @@ esac
 
 # Adding logic to kill either process
 [ "$AIRUPNP_VAR" = "kill" ] && sed -i '4,7d' /etc/supervisord.conf
-[ "$AIRCAST_VAR" = "kill" ] && sed -i '9,12' /etc/supervisord.conf
+[ "$AIRCAST_VAR" = "kill" ] && sed -i '9,12d' /etc/supervisord.conf
