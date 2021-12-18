@@ -31,8 +31,10 @@ else
     sed -i '4,7d' /etc/supervisord.conf
   else
     sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
+  fi
 fi
 
+# Insert runtime commands if user has entered them, or enable kill switch for unused services
 if [ -z "$AIRCAST_VAR" ]; then
   sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 else
@@ -40,4 +42,5 @@ else
     sed -i '9,12d' /etc/supervisord.conf
   else
     sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
+  fi
 fi
