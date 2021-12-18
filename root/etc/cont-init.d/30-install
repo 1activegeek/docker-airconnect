@@ -24,19 +24,19 @@ esac
 [ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = aircast-x86-64;process_name = aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 
 # Insert runtime commands if user has entered them, or enable kill switch for unused services
-if [[ -z "$AIRUPNP_VAR" ]]; then
+if [ -z "$AIRUPNP_VAR" ]; then
   sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR"' -l 1000:2000;' /etc/supervisord.conf
 else
-  if [[ "$AIRUPNP_VAR" = "kill" ]]; then
+  if [ "$AIRUPNP_VAR" = "kill" ]; then
     sed -i '4,7d' /etc/supervisord.conf
   else
     sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
 fi
 
-if [[ -z "$AIRCAST_VAR" ]]; then
+if [ -z "$AIRCAST_VAR" ]; then
   sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 else
-  if [[ "$AIRCAST_VAR" = "kill" ]]; then
+  if [ "$AIRCAST_VAR" = "kill" ]; then
     sed -i '9,12d' /etc/supervisord.conf
   else
     sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
