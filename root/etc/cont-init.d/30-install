@@ -23,24 +23,29 @@ esac
 [ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = airupnp-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
 [ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = aircast-x86-64;process_name = aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 
-# Insert runtime commands if user has entered them, or enable kill switch for unused services
+UPNP=$(sed '4,7!d' /etc/supervisord.conf | grep -c '^#')
+CAST=$(sed '9,12!d' /etc/supervisord.conf | grep -c '^#')
+
+# Check if VAR is empty, and assign arch / if not empty, run with command and assign arch / if kill, and hasn't run (=0) then comment out
 if [ -z "$AIRUPNP_VAR" ]; then
   sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR"' -l 1000:2000;' /etc/supervisord.conf
-else
-  if [ "$AIRUPNP_VAR" = "kill" ]; then
-    sed -i '4,7d' /etc/supervisord.conf
-  else
-    sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
-  fi
+elif [ "$AIRUPNP_VAR" != "kill" ]; then
+  sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
+elif [ "$AIRUPNP_VAR" = "kill" ] && [ "$UPNP" = 0 ]; then
+    for i in {4..7}
+    do
+      sed -i ''$i'{s/^/#/}' /etc/supervisord.conf
+    done
 fi
 
-# Insert runtime commands if user has entered them, or enable kill switch for unused services
+# Check if VAR is empty, and assign arch / if not empty, run with command and assign arch / if kill, and hasn't run (=0) then comment out
 if [ -z "$AIRCAST_VAR" ]; then
   sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
-else
-  if [ "$AIRCAST_VAR" = "kill" ]; then
-    sed -i '9,12d' /etc/supervisord.conf
-  else
-    sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
-  fi
+elif [ "$AIRCAST_VAR" != "kill" ]; then
+  sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
+elif [ "$AIRCAST_VAR" = "kill" ] && [ "$CAST" = 0 ]; then
+    for i in {9..12}
+    do
+      sed -i ''$i'{s/^/#/}' /etc/supervisord.conf
+    done
 fi
