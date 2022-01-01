@@ -1,5 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+if [ "$ARCH_VAR" == "amd64" ]; then
+  ARCH_VAR=x86-64
+elif [ "$ARCH_VAR" == "arm64" ]; then
+  ARCH_VAR=aarch64
+
 echo "Checking for valid arch options"
 case $ARCH_VAR in
   x86-64)
