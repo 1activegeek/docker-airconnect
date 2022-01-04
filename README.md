@@ -4,7 +4,7 @@ If you like what I've created, please consider contributing:
 <br>
 <a href="https://www.paypal.com/paypalme/shawnmix/3"><img src="https://img.shields.io/badge/PayPal-Make%20a%20Donation-grey?style=for-the-badge&logo=paypal&labelColor=000000"></a>
 <br>
-<a href="https://www.buymeacoffee.com/1activegeek"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
+<a href="https://ko-fi.com/shawnmix"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
 <br>
 ## Please note, a breaking change has occurred to the tags used/available. If you were using a `latest-arm64` or similar tag that had the architecture in the name, please remove this so you are updated to the latest. 
 <br>
@@ -76,4 +76,4 @@ If you perform any realtime testing, it is suggested to completely restart the c
 
 <p>
 <p>
-<a href="https://www.buymeacoffee.com/1activegeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/black_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+<a href="https://ko-fi.com/shawnmix" target="_blank"><img src="https://user-images.githubusercontent.com/1685680/61808727-4925de00-ae3c-11e9-9d60-66bef358fd8e.png" alt="Buy Me A Coffee" style="height: 50px !important;width: auto !important;" ></a>
