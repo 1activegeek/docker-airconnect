@@ -1,15 +1,15 @@
 #!/usr/bin/with-contenv bash
 
 if [ "$ARCH_VAR" == "amd64" ]; then
-  ARCH_VAR=x86-64
+  ARCH_VAR=x86_64
 elif [ "$ARCH_VAR" == "arm64" ]; then
   ARCH_VAR=aarch64
 fi
 
 echo "Checking for valid arch options"
 case $ARCH_VAR in
-  x86-64)
-    echo "Proceeding with x86-64 arch"
+  x86_64)
+    echo "Proceeding with x86_64 arch"
     ;;
   aarch64)
     echo "Proceeding with aarch64 arch"
@@ -26,17 +26,17 @@ case $ARCH_VAR in
 esac
 
 # Adjusting process names in supervisord for Architecture differences
-[ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = airupnp-x86-64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
-[ "$ARCH_VAR" != "x86-64" ] && sed -i 's;process_name = aircast-x86-64;process_name = aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
+[ "$ARCH_VAR" != "x86_64" ] && sed -i 's;process_name = airupnp-x86_64;process_name = airupnp-'"$ARCH_VAR"';' /etc/supervisord.conf
+[ "$ARCH_VAR" != "x86_64" ] && sed -i 's;process_name = aircast-x86_64;process_name = aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 
 UPNP=$(sed '4,7!d' /etc/supervisord.conf | grep -c '^#')
 CAST=$(sed '9,12!d' /etc/supervisord.conf | grep -c '^#')
 
 # Check if VAR is empty, and assign arch / if not empty, run with command and assign arch / if kill, and hasn't run (=0) then comment out
 if [ -z "$AIRUPNP_VAR" ]; then
-  sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR"' -l 1000:2000;' /etc/supervisord.conf
+  sed -i 's;command=/bin/airupnp-x86_64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR"' -l 1000:2000;' /etc/supervisord.conf
 elif [ "$AIRUPNP_VAR" != "kill" ]; then
-  sed -i 's;command=/bin/airupnp-x86-64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
+  sed -i 's;command=/bin/airupnp-x86_64 -l 1000:2000;command=/bin/airupnp-'"$ARCH_VAR $AIRUPNP_VAR"';' /etc/supervisord.conf
 elif [ "$AIRUPNP_VAR" = "kill" ] && [ "$UPNP" = 0 ]; then
     for i in {4..7}
     do
@@ -46,9 +46,9 @@ fi
 
 # Check if VAR is empty, and assign arch / if not empty, run with command and assign arch / if kill, and hasn't run (=0) then comment out
 if [ -z "$AIRCAST_VAR" ]; then
-  sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
+  sed -i 's;command=/bin/aircast-x86_64;command=/bin/aircast-'"$ARCH_VAR"';' /etc/supervisord.conf
 elif [ "$AIRCAST_VAR" != "kill" ]; then
-  sed -i 's;command=/bin/aircast-x86-64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
+  sed -i 's;command=/bin/aircast-x86_64;command=/bin/aircast-'"$ARCH_VAR $AIRCAST_VAR"';' /etc/supervisord.conf
 elif [ "$AIRCAST_VAR" = "kill" ] && [ "$CAST" = 0 ]; then
     for i in {9..12}
     do
