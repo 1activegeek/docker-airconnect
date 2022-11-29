@@ -1,10 +1,9 @@
-name: Multi-Arch Build
+name: Multi-Arch Build - Master
 
 on:
   push:
     branches:
       - master
-      - dev
   pull_request:
     branches:
       - master
@@ -31,17 +30,8 @@ jobs:
         run: |
           DOCKER_IMAGE=1activegeek/airconnect
           DOCKER_PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64
-          VERSION=dev
-
-          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
-            VERSION=latest
-          fi
-
-          if [ "${{ github.event }}" = "schedule" ]; then
-            VERSION=latest
-          fi
-
-          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
+          VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION} --tag ${DOCKER_IMAGE}:latest"
           
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
