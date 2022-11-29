@@ -33,6 +33,10 @@ Sample Docker run config:
 
 `docker run -d --net=host 1activegeek/airconnect`
 
+If you would like to run a specific version of AirConnect, or revert to a previous known good working version (in case my container breaks or other issues found in the original application itself) you can now specify the Release Version corresponding to the releases from the original developer of the application as found here: https://github.com/philippe44/AirConnect/releases. This can be done by using a similar command, but inserting the release number after the image name. For example to run release 1.0.8 use:
+
+`docker run -d --net=host 1activegeek/airconnect:1.0.8`
+
 I've introduced a secondary function as well in case you'd like to run the container with specifc runtime variables appended to the run config. This includes things such as the examples below in the troubleshooting section. It's purpose is more aimed at folks who'd like to use a custom configuration file for example, which requires running with `-x <name of file>` to be able to run this config.
 
 To utilize this, please use the following environment variables when you run the container:
@@ -76,6 +80,7 @@ Once inside the container, you can use standard config options to run the app as
 If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
 # Changelog
+**2022-11-28:** Some recent updates to handle changes by the original developer in formatting for binary file names. More efficient workflow runs as well. Added in output of tags for AirConnect versions, allowing you to specifically use a specific version of AirConnect. 
 **2022-01-03:** Fixed the multi-arch builds with the new setup on GH actions, migrated to single unified Dockerfile deployment<br>
 **2021-12-12:** Modified the builder to use the docker buildx GH actions, and manifest to be just the single tag. Additionally the Binary pull has been moved from startup script, to the actual dockerfile. This results in the images being a point-in-time version of the current airconnect binaries vs always running the latest. `kill` function introduced for the AIRUPNP_VAR/AIRCAST_VAR variables which will stop the appropriate service from running (in case you are not using it).
 

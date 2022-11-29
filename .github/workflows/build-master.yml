@@ -11,7 +11,7 @@ on:
     - cron: '0 2 * * 6'
 
 jobs:
-  build:
+  build-master:
     runs-on: ubuntu-latest
 
     steps:
