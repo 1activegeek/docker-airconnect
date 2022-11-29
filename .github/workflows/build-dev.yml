@@ -1,18 +1,12 @@
-name: Multi-Arch Build
+name: Multi-Arch Build - Development
 
 on:
   push:
-    branches:
+    branches-ignore:
       - master
-      - dev
-  pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: '0 2 * * 6'
 
 jobs:
-  build:
+  build-dev:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,17 +25,8 @@ jobs:
         run: |
           DOCKER_IMAGE=1activegeek/airconnect
           DOCKER_PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64
-          VERSION=dev
-
-          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
-            VERSION=latest
-          fi
-
-          if [ "${{ github.event }}" = "schedule" ]; then
-            VERSION=latest
-          fi
-
-          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
+          VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          TAGS="--tag ${DOCKER_IMAGE}:dev-${VERSION} --tag ${DOCKER_IMAGE}:dev"
           
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -65,4 +50,4 @@ jobs:
       - name: Inspect Image
         if: github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:dev-${{ steps.prepare.outputs.version }}
