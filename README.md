@@ -11,7 +11,8 @@ If you like what I've created, please consider contributing:
 <br>
 <a href="https://ko-fi.com/shawnmix"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
 <br>
-## Please note, a breaking change has occurred to the tags used/available. If you were using a `latest-arm64` or similar tag that had the architecture in the name, please remove this so you are updated to the latest. 
+## ARMv7 HAS BEEN DEPRECATED. IF you'd like to run one of the previous tags of the ARM variant, you can pin to that tag. Unfortunately the base I use, has deprecated ARMv7 support. My only alternative to support is to re-base the entire container which I don't currently have cycles for. I apologize if you were relying on this on those devices.
+
 <br>
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
@@ -80,7 +81,8 @@ Once inside the container, you can use standard config options to run the app as
 If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
 # Changelog
-**2022-11-28:** Some recent updates to handle changes by the original developer in formatting for binary file names. More efficient workflow runs as well. Added in output of tags for AirConnect versions, allowing you to specifically use a specific version of AirConnect. 
+**2023-07-08:** The LS.io team has officially deprecated building ARMv7 base images. Had to deprecate this support as well. Attempted to comment out in case changes happen in the future to remedy this. <br>
+**2022-11-28:** Some recent updates to handle changes by the original developer in formatting for binary file names. More efficient workflow runs as well. Added in output of tags for AirConnect versions, allowing you to specifically use a specific version of AirConnect. <br>
 **2022-01-03:** Fixed the multi-arch builds with the new setup on GH actions, migrated to single unified Dockerfile deployment<br>
 **2021-12-12:** Modified the builder to use the docker buildx GH actions, and manifest to be just the single tag. Additionally the Binary pull has been moved from startup script, to the actual dockerfile. This results in the images being a point-in-time version of the current airconnect binaries vs always running the latest. `kill` function introduced for the AIRUPNP_VAR/AIRCAST_VAR variables which will stop the appropriate service from running (in case you are not using it).
 
