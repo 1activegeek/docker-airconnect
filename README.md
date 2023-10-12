@@ -1,9 +1,11 @@
 Branch Status
 <br>
-Master: ![Master](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=master)
+Master: ![Master](https://github.com/sidevesh/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=master)
 <br>
-Dev: ![Development](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=dev)
+Dev: ![Development](https://github.com/sidevesh/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=dev)
 <br>
+
+## This fork is meant to build armv7 docker image also, will remove it if upstreamed
 
 If you like what I've created, please consider contributing:
 <br>
@@ -15,8 +17,11 @@ If you like what I've created, please consider contributing:
 <br>
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
-On DockerHub: https://hub.docker.com/r/1activegeek/airconnect  
-On GitHub: https://github.com/1activegeek/docker-airconnect  
+On DockerHub: https://hub.docker.com/r/sidevesh/airconnect  
+On GitHub: https://github.com/sidevesh/docker-airconnect  
+
+## This fork is meant to build armv7 docker image using GitHub actions and push to DockerHub
+Only addition is the `.github/workflows` directory
 
 This is a containerized build of the fantastics program by [philippe44](https://github.com/philippe44) called AirConnect. It allows you to be able to use AirPlay to push audio to Chromecast and UPNP based devices. There are some advanced details and information that you should review on his [GitHub Project](https://github.com/philippe44/AirConnect). For the most part this container needs nothing more than to launch it using Host networking.
 
@@ -31,11 +36,11 @@ This can be run using a docker compose file or a standard docker run command.
 
 Sample Docker run config:
 
-`docker run -d --net=host 1activegeek/airconnect`
+`docker run -d --net=host sidevesh/airconnect`
 
 If you would like to run a specific version of AirConnect, or revert to a previous known good working version (in case my container breaks or other issues found in the original application itself) you can now specify the Release Version corresponding to the releases from the original developer of the application as found here: https://github.com/philippe44/AirConnect/releases. This can be done by using a similar command, but inserting the release number after the image name. For example to run release 1.0.8 use:
 
-`docker run -d --net=host 1activegeek/airconnect:1.0.8`
+`docker run -d --net=host sidevesh/airconnect:1.0.8`
 
 I've introduced a secondary function as well in case you'd like to run the container with specifc runtime variables appended to the run config. This includes things such as the examples below in the troubleshooting section. It's purpose is more aimed at folks who'd like to use a custom configuration file for example, which requires running with `-x <name of file>` to be able to run this config.
 
