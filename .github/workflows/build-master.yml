@@ -29,8 +29,7 @@ jobs:
         id: prepare
         run: |
           DOCKER_IMAGE=1activegeek/airconnect
-          DOCKER_PLATFORMS=linux/amd64,linux/arm64
-          # linux/arm/v7 removed as deprecated by ls.io
+          DOCKER_PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64
           VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
           TAGS="--tag ${DOCKER_IMAGE}:${VERSION} --tag ${DOCKER_IMAGE}:latest"
           
