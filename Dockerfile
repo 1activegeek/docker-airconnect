@@ -8,7 +8,8 @@ ENV ARCH_VAR=$TARGETARCH
 RUN apt-get update && apt-get install -y \
     supervisor \
     libssl3 \
-    libssl-dev
+    libssl-dev \
+    curl
 COPY root/ /
 
 # Grab latest version of the app, extract binaries, cleanup tmp dir
