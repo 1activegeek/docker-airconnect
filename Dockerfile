@@ -1,4 +1,4 @@
-FROM ubuntu:jammy
+FROM lsiobase/ubuntu:jammy-05e08486-ls73
 
 # Pulling TARGET_ARCH from build arguments and setting ENV variable
 ARG TARGETARCH
@@ -8,8 +8,7 @@ ENV ARCH_VAR=$TARGETARCH
 RUN apt-get update && apt-get install -y \
     supervisor \
     libssl3 \
-    libssl-dev \
-    curl
+    libssl-dev
 COPY root/ /
 
 # Grab latest version of the app, extract binaries, cleanup tmp dir
