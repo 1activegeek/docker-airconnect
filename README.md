@@ -12,7 +12,7 @@ If you like what I've created, please consider contributing:
 <a href="https://ko-fi.com/shawnmix"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
 <br>
 ### ARMv7 HAS BEEN DEPRECATED.
-#### Unfortunately the base I use, has deprecated ARMv7 support. My only alternative to support is to re-base the entire container which I don't currently have cycles for. 2 Options are now available if you are using ARMv7 platforms: one is to pin this container version to 1.0.8 until something changes (last supported ARMv7 release of my container) or check out https://hub.docker.com/repository/docker/sidevesh/airconnect which is a fork from [sidevesh](https://githubc.com/sidevesh) that is only intended for ARMv7 deployments. 
+#### Unfortunately the base I use, has deprecated ARMv7 support. My only alternative to support is to re-base the entire container which I don't currently have cycles for. 2 Options are now available if you are using ARMv7 platforms: one is to pin this container version to 1.0.8 until something changes (last supported ARMv7 release of my container) or check out https://hub.docker.com/repository/docker/sidevesh/airconnect which is a fork from [sidevesh](https://github.com/sidevesh) that is only intended for ARMv7 deployments. 
 
 <br>
 
