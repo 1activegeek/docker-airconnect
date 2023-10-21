@@ -83,7 +83,7 @@ Once inside the container, you can use standard config options to run the app as
 If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
 # Changelog
-**2023-10-21:** Package maintainer changed the release asset output, had to move from tarball to zip package. No major change should be experienced as the output is still the same. Also added link in docs to an ARMv7 repo for those using older devices stuck on ARMv7 release maintained by [sidevesh](https://github.com/sidevesh).
+**2023-10-21:** Package maintainer changed the release asset output, had to move from tarball to zip package. No major change should be experienced as the output is still the same. Also added link in docs to an ARMv7 repo for those using older devices stuck on ARMv7 release maintained by [sidevesh](https://github.com/sidevesh). <br>
 **2023-07-08:** The LS.io team has officially deprecated building ARMv7 base images. Had to deprecate this support as well. Attempted to comment out in case changes happen in the future to remedy this. <br>
 **2022-11-28:** Some recent updates to handle changes by the original developer in formatting for binary file names. More efficient workflow runs as well. Added in output of tags for AirConnect versions, allowing you to specifically use a specific version of AirConnect. <br>
 **2022-01-03:** Fixed the multi-arch builds with the new setup on GH actions, migrated to single unified Dockerfile deployment<br>
