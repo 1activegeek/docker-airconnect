@@ -1,8 +1,8 @@
-Branch Status
+Branch Status:
 <br>
-Master: ![Master](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=master)
+[![Multi-Arch Build - Master](https://github.com/1activegeek/docker-airconnect/actions/workflows/build-master.yml/badge.svg)](https://github.com/1activegeek/docker-airconnect/actions/workflows/build-master.yml)
 <br>
-Dev: ![Development](https://github.com/1activegeek/docker-airconnect/workflows/Multi-Arch%20Build/badge.svg?branch=dev)
+[![Multi-Arch Build - Development](https://github.com/1activegeek/docker-airconnect/actions/workflows/build-dev.yml/badge.svg)](https://github.com/1activegeek/docker-airconnect/actions/workflows/build-dev.yml)
 <br>
 
 If you like what I've created, please consider contributing:
