@@ -1,2 +1,2 @@
 #!/usr/bin/with-contenv bash
-exec /etc/s6-overlay/s6-rc.d/init-airconnect/airconnect.sh
+exec /etc/s6-overlay/s6-rc.d/init-airconnect/airconnect-setup.sh
