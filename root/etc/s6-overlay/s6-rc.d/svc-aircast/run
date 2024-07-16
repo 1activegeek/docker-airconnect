@@ -1,18 +1,2 @@
-#!/usr/bin/execlineb -P
-
-# Import environment variables
-importas -u AIRCAST_VAR AIRCAST_VAR
-
-# Check for AIRCAST_VAR
-if { s6-test ${AIRCAST_VAR} = "kill" }
-s6-echo "AIRCAST_VAR set to kill, killing aircast service launch"
-if {
-  exit 0
-}
-if { s6-test ${AIRCAST_VAR} != "kill" }
-s6-echo "AIRCAST_VAR present, updating aircast launch variables"
-if {
-  exec /bin/aircast-linux-x86_64 ${AIRCAST_VAR}
-}
-s6-echo "No AIRCAST_VAR present, continuing with standard aircast launch variables"
+#!/usr/bin/with-contenv bash
 exec /bin/aircast-linux-x86_64
