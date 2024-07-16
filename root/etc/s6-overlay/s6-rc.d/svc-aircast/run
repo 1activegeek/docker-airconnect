@@ -1,2 +1,0 @@
-#!/usr/bin/execlineb -P
-exec /bin/aircast-linux-x86_64

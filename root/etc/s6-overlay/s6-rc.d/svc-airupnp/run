@@ -1,2 +1,0 @@
-#!/usr/bin/with-contenv bash
-exec /bin/airupnp-linux-x86_64 -l 1000:2000
