@@ -1,2 +1,18 @@
-#!/usr/bin/with-contenv bash
+#!/usr/bin/execlineb -P
+
+# Import environment variables
+importas -u AIRUPNP_VAR AIRUPNP_VAR
+
+# Check for AIRUPNP_VAR
+if { s6-test ${AIRUPNP_VAR} = "kill" }
+s6-echo "AIRUPNP_VAR set to kill, killing airupnp service launch"
+if {
+  exit 0
+}
+if { s6-test ${AIRUPNP_VAR} != "kill" }
+s6-echo "AIRUPNP_VAR present, using custom user airupnp launch variables"
+if {
+  exec /bin/airupnp-linux-x86_64 ${AIRUPNP_VAR}
+}
+s6-echo "No AIRUPNP_VAR present, continuing with standard airupnp launch variables"
 exec /bin/airupnp-linux-x86_64 -l 1000:2000
