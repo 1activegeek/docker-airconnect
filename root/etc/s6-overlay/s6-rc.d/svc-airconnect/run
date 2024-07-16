@@ -8,7 +8,7 @@ elif [ "$AIRUPNP_VAR" = "kill" ]; then
   echo "AIRUPNP_VAR set to kill, skipping airupnp service launch"
 else
   echo "AIRUPNP_VAR present, using custom user airupnp launch variables"
-  exec /bin/airupnp-linux-x86_64 "$AIRUPNP_VAR"
+  exec /bin/airupnp-linux-x86_64 $AIRUPNP_VAR
 fi
 
 # Check for VAR - default, kill, custom
@@ -19,5 +19,5 @@ elif [ "$AIRCAST_VAR" = "kill" ]; then
   echo "AIRCAST_VAR set to kill, skipping aircast service launch"
 else
   echo "AIRCAST_VAR present, using custom user aircast launch variables"
-  exec /bin/aircast-linux-x86_64 "$AIRCAST_VAR"
+  exec /bin/aircast-linux-x86_64 $AIRCAST_VAR
 fi
