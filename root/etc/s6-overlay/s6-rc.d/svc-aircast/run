@@ -7,7 +7,7 @@ if [ "$AIRCAST_VAR" = "kill" ]; then
 elif [ "$AIRCAST_VAR" != "kill" ]; then
   echo "AIRCAST_VAR present, using custom user aircast launch variables"
   exec /bin/aircast-linux-x86_64 "$AIRCAST_VAR"
-else;
+else
   echo "No AIRCAST_VAR present, continuing with standard aircast launch variables"
   exec /bin/aircast-linux-x86_64
 fi
