@@ -11,10 +11,17 @@ If you like what I've created, please consider contributing:
 <br>
 <a href="https://ko-fi.com/shawnmix"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
 <br>
-### ARMv7 HAS BEEN DEPRECATED.
-#### Unfortunately the base I use, has deprecated ARMv7 support. My only alternative to support is to re-base the entire container which I don't currently have cycles for. 2 Options are now available if you are using ARMv7 platforms: one is to pin this container version to 1.0.8 until something changes (last supported ARMv7 release of my container) or check out https://hub.docker.com/repository/docker/sidevesh/airconnect which is a fork from [sidevesh](https://github.com/sidevesh) that is only intended for ARMv7 deployments. 
 
-<br>
+# If you're reading this ...
+
+Please validate/test the dev version of this container image. I had to restructure the container on 7/15 due to upstream updates, leading to a complete rebuild of the startup/supervisor daemon system.
+
+Steps:
+1. Run the current `latest` tag to ensure a working setup.
+2. Use the `dev` tag to validate its functionality.
+3. Report any errors or confirm it works by commenting on https://github.com/1activegeek/docker-airconnect/issues/62, including any special configurations used (ENV VARs, configs, etc.).
+
+I plan to run this for 2 weeks and push `dev` to `latest` by the end of July. Thank you for your help.
 
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
@@ -82,7 +89,12 @@ Once inside the container, you can use standard config options to run the app as
 
 If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
+## ARMv7 HAS BEEN DEPRECATED.
+Unfortunately the base I use, has deprecated ARMv7 support. My only alternative to support is to re-base the entire container which I don't currently have cycles for. 2 Options are now available if you are using ARMv7 platforms: one is to pin this container version to 1.0.8 until something changes (last supported ARMv7 release of my container) or check out https://hub.docker.com/repository/docker/sidevesh/airconnect which is a fork from [sidevesh](https://github.com/sidevesh) that is only intended for ARMv7 deployments. 
+<br>
+
 # Changelog
+**2024-07-15:** Large change to update to support for s6 v3 since v2 has been deprecated by upstream container image provider. Simplified launch scritp, simplified service files, easier separation of both services, less "stuff" overall. Currently testing in Dev branch on Docker Hub.
 **2023-10-21:** Package maintainer changed the release asset output, had to move from tarball to zip package. No major change should be experienced as the output is still the same. Also added link in docs to an ARMv7 repo for those using older devices stuck on ARMv7 release maintained by [sidevesh](https://github.com/sidevesh). <br>
 **2023-07-08:** The LS.io team has officially deprecated building ARMv7 base images. Had to deprecate this support as well. Attempted to comment out in case changes happen in the future to remedy this. <br>
 **2022-11-28:** Some recent updates to handle changes by the original developer in formatting for binary file names. More efficient workflow runs as well. Added in output of tags for AirConnect versions, allowing you to specifically use a specific version of AirConnect. <br>
