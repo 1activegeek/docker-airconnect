@@ -1,13 +1,16 @@
 #!/usr/bin/with-contenv bash
 
+echo "[AirConnect-AIRCAST] Launching AIRCAST ..."
 # Check for VAR - default, kill, custom
 if [ -z "$AIRCAST_VAR" ]; then
-  echo "No AIRCAST_VAR present, continuing with standard aircast launch variables"
+  echo "[AirConnect-AIRCAST] AIRCAST_VAR is NOT present, launching with standard launch variables"
   exec /usr/bin/aircast-docker -Z
 elif [ "$AIRCAST_VAR" = "kill" ]; then
-  echo "AIRCAST_VAR set to kill, skipping aircast service launch"
+  echo "[AirConnect-AIRCAST] AIRCAST_VAR set to kill, skipping aircast service launch"
   exit 0
 else
-  echo "AIRCAST_VAR present, using custom user aircast launch variables"
+  echo "[AirConnect-AIRCAST] AIRCAST_VAR is present, launching with custom launch variables: $AIRCAST_VAR"
   exec /usr/bin/aircast-docker -Z $AIRCAST_VAR
 fi
+
+echo "[AirConnect-AIRCAST] AIRCAST launch sequence complete ..."
