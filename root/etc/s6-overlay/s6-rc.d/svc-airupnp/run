@@ -1,13 +1,13 @@
 #!/usr/bin/with-contenv bash
 
 # Check for VAR - default, kill, custom
-# if [ -z "$AIRUPNP_VAR" ]; then
-echo "No AIRUPNP_VAR present, continuing with standard airupnp launch variables"
-exec /bin/airupnp-linux-x86_64 -l 1000:2000
-# elif [ "$AIRUPNP_VAR" = "kill" ]; then
-#   echo "AIRUPNP_VAR set to kill, skipping airupnp service launch"
-#   sleep infinity
-# else
-#   echo "AIRUPNP_VAR present, using custom user airupnp launch variables"
-#   exec /bin/airupnp-linux-x86_64 $AIRUPNP_VAR
-# fi
+if [ -z "$AIRUPNP_VAR" ]; then
+  echo "No AIRUPNP_VAR present, continuing with standard airupnp launch variables"
+  /bin/airupnp-linux-x86_64 -l 1000:2000
+elif [ "$AIRUPNP_VAR" = "kill" ]; then
+  echo "AIRUPNP_VAR set to kill, skipping airupnp service launch"
+  sleep infinity
+else
+  echo "AIRUPNP_VAR present, using custom user airupnp launch variables"
+  /bin/airupnp-linux-x86_64 $AIRUPNP_VAR
+fi
