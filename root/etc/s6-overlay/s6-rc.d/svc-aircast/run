@@ -3,11 +3,11 @@
 # Check for VAR - default, kill, custom
 if [ -z "$AIRCAST_VAR" ]; then
   echo "No AIRCAST_VAR present, continuing with standard aircast launch variables"
-  exec /bin/aircast-linux-x86_64
+  exec /usr/bin/aircast-linux-x86_64
 elif [ "$AIRCAST_VAR" = "kill" ]; then
   echo "AIRCAST_VAR set to kill, skipping aircast service launch"
   exit 0
 else
   echo "AIRCAST_VAR present, using custom user aircast launch variables"
-  exec /bin/aircast-linux-x86_64 $AIRCAST_VAR
+  exec /usr/bin/aircast-linux-x86_64 $AIRCAST_VAR
 fi
