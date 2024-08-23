@@ -12,7 +12,6 @@ If you like what I've created, please consider contributing:
 <a href="https://ko-fi.com/shawnmix"><img src="https://img.shields.io/badge/Coffee-Buy%20me%20a%20Coffee-grey?style=for-the-badge&logo=buy-me-a-coffee&labelColor=000000"></a>
 <br>
 
-
 # docker-airconnect
 AirConnect container for turning Chromecast into Airplay targets  
 On DockerHub: https://hub.docker.com/r/1activegeek/airconnect  
