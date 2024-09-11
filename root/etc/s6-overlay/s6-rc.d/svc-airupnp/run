@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+
+echo "[AirConnect-AIRUPNP] Launching AIRUPNP ..."
+# Check for VAR - default, kill, custom
+if [ -z "$AIRUPNP_VAR" ]; then
+  echo "[AirConnect-AIRUPNP] AIRUPNP_VAR is NOT present, launching with standard launch variables"
+  exec /usr/bin/airupnp-docker -Z -l 1000:2000
+elif [ "$AIRUPNP_VAR" = "kill" ]; then
+  echo "[AirConnect-AIRUPNP] AIRUPNP_VAR set to kill, skipping AIRUPNP service launch"
+  exit 0
+else
+  echo "[AirConnect-AIRUPNP] AIRUPNP_VAR is present, launching with custom launch variables: $AIRUPNP_VAR"
+  exec /usr/bin/airupnp-docker -Z $AIRUPNP_VAR
+fi
+
+echo "[AirConnect-AIRUPNP] AIRUPNP launch sequence complete ..."
