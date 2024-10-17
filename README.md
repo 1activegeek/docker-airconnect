@@ -21,7 +21,6 @@ This is a containerized build of the fantastics program by [philippe44](https://
 
 The main purpose for building this container over the others out there, is that this will always update to the latest version of the app as pulled from the original GitHub page. Currently there is another popular container that is not updated. This uses runtime scripting to ensure it will always pull the latest version of the binary before running - without intervention by me. It also uses the base image produced by the [LS.io team](https://github.com/linuxserver) to reduce footprint.
 
-
 Multi-arch support has been introduced, so there should be seamless use on AMD64, ARM64, and ARM devices.
 
 # Running
@@ -31,6 +30,20 @@ This can be run using a docker compose file or a standard docker run command.
 Sample Docker run config:
 
 `docker run -d --net=host 1activegeek/airconnect`
+
+Sample Docker compose config using volume bind and environment variable:
+```
+services:
+  airconnect:
+    network_mode: host
+    image: 1activegeek/airconnect
+    volumes:
+      - /home/root/data/airconnect:/config
+    environment:
+      - AIRCAST_VAR=-x /config/config.xml
+      - AIRUPNP_VAR=kill
+    restart: unless-stopped
+```
 
 If you would like to run a specific version of AirConnect, or revert to a previous known good working version (in case my container breaks or other issues found in the original application itself) you can now specify the Release Version corresponding to the releases from the original developer of the application as found here: https://github.com/philippe44/AirConnect/releases. This can be done by using a similar command, but inserting the release number after the image name. For example to run release 1.0.8 use:
 
