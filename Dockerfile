@@ -4,9 +4,7 @@ FROM lsiobase/ubuntu:jammy-4503a628-ls98
 ARG TARGETARCH
 ENV ARCH_VAR=$TARGETARCH
 
-# Add Supervisor
 RUN apt-get update && apt-get install -y \
-    supervisor \
     libssl3 \
     libssl-dev \
     unzip
