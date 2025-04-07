@@ -11,7 +11,7 @@ while [ $retries -lt $max_retries ]; do
     /usr/bin/airupnp-docker -Z -l 1000:2000
   elif [ "$AIRUPNP_VAR" = "kill" ]; then
     echo "[AirConnect-AIRUPNP] AIRUPNP_VAR set to kill, skipping AIRUPNP service launch"
-    exec sleep infinity
+    exit 0
   else
     echo "[AirConnect-AIRUPNP] AIRUPNP_VAR is present, launching with custom launch variables: $AIRUPNP_VAR"
     /usr/bin/airupnp-docker -Z $AIRUPNP_VAR

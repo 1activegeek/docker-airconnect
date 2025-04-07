@@ -11,7 +11,7 @@ while [ $retries -lt $max_retries ]; do
     /usr/bin/aircast-docker -Z
   elif [ "$AIRCAST_VAR" = "kill" ]; then
     echo "[AirConnect-AIRCAST] AIRCAST_VAR set to kill, skipping aircast service launch"
-    exec sleep infinity
+    exit 0
   else
     echo "[AirConnect-AIRCAST] AIRCAST_VAR is present, launching with custom launch variables: $AIRCAST_VAR"
     /usr/bin/aircast-docker -Z $AIRCAST_VAR
