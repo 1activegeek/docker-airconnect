@@ -1,16 +1,26 @@
 #!/usr/bin/with-contenv bash
 
 echo "[AirConnect-AIRCAST] Launching AIRCAST ..."
-# Check for VAR - default, kill, custom
-if [ -z "$AIRCAST_VAR" ]; then
-  echo "[AirConnect-AIRCAST] AIRCAST_VAR is NOT present, launching with standard launch variables"
-  exec /usr/bin/aircast-docker -Z
-elif [ "$AIRCAST_VAR" = "kill" ]; then
-  echo "[AirConnect-AIRCAST] AIRCAST_VAR set to kill, skipping aircast service launch"
-  exit 0
-else
-  echo "[AirConnect-AIRCAST] AIRCAST_VAR is present, launching with custom launch variables: $AIRCAST_VAR"
-  exec /usr/bin/aircast-docker -Z $AIRCAST_VAR
-fi
 
-echo "[AirConnect-AIRCAST] AIRCAST launch sequence complete ..."
+retries=0
+max_retries=5
+
+while [ $retries -lt $max_retries ]; do
+  if [ -z "$AIRCAST_VAR" ]; then
+    echo "[AirConnect-AIRCAST] AIRCAST_VAR is NOT present, launching with standard launch variables"
+    /usr/bin/aircast-docker -Z
+  elif [ "$AIRCAST_VAR" = "kill" ]; then
+    echo "[AirConnect-AIRCAST] AIRCAST_VAR set to kill, skipping aircast service launch"
+    exec sleep infinity
+  else
+    echo "[AirConnect-AIRCAST] AIRCAST_VAR is present, launching with custom launch variables: $AIRCAST_VAR"
+    /usr/bin/aircast-docker -Z $AIRCAST_VAR
+  fi
+
+  retries=$((retries + 1))
+  echo "[AirConnect-AIRCAST] aircast crashed. Retry $retries/$max_retries in 5 seconds..."
+  sleep 5
+done
+
+echo "[AirConnect-AIRCAST] aircast failed too many times, giving up"
+exit 1
