@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:jammy-4503a628-ls98
+FROM lsiobase/ubuntu:noble
 
 # Pulling TARGET_ARCH from build arguments and setting ENV variable
 ARG TARGETARCH
