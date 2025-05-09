@@ -1,14 +1,12 @@
-name: Multi-Arch Build - Master
+name: Multi-Arch Build - PR Testing
 
 on:
-  push:
+  pull_request:
     branches:
       - master
-  schedule:
-    - cron: '0 2 * * 6'
 
 jobs:
-  build-master:
+  build-pr:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +27,7 @@ jobs:
           DOCKER_PLATFORMS=linux/amd64,linux/arm64
           # linux/arm/v7 removed as deprecated by ls.io
           VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
-          TAGS="--tag ${DOCKER_IMAGE}:${VERSION} --tag ${DOCKER_IMAGE}:latest"
+          TAGS="--tag ${DOCKER_IMAGE}:pr-${{ github.event.pull_request.number }}${VERSION} --tag ${DOCKER_IMAGE}:pr-${{ github.event.pull_request.number }}"
           
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -53,4 +51,4 @@ jobs:
       - name: Inspect Image
         if: github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:pr-${{ github.event.pull_request.number }}-${{ steps.prepare.outputs.version }}
