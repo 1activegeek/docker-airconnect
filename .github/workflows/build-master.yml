@@ -1,11 +1,14 @@
 name: Multi-Arch Build - Master
 
 on:
-  push:
-    branches:
-      - master
   schedule:
     - cron: '0 2 * * 6'
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        description: "Optional version tag to override AirConnect release version"
+        required: false
+        default: ""
 
 jobs:
   build-master:
@@ -28,7 +31,11 @@ jobs:
           DOCKER_IMAGE=1activegeek/airconnect
           DOCKER_PLATFORMS=linux/amd64,linux/arm64
           # linux/arm/v7 removed as deprecated by ls.io
-          VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          VERSION="${{ github.event.inputs.VERSION }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          fi
+
           TAGS="--tag ${DOCKER_IMAGE}:${VERSION} --tag ${DOCKER_IMAGE}:latest"
           
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
