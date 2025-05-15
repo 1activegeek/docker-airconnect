@@ -3,14 +3,15 @@ FROM lsiobase/ubuntu:noble
 # Pulling TARGET_ARCH from build arguments and setting ENV variable
 ARG TARGETARCH
 ENV ARCH_VAR=$TARGETARCH
+ENV S6_STAGE2_HOOK=/app/init.sh
 
 # Add Supervisor
 RUN apt-get update && apt-get install -y \
-    supervisor \
     libssl3 \
     libssl-dev \
     unzip
 COPY root/ /
+COPY /src /app
 
 # Grab latest version of the app, extract binaries, cleanup tmp dir
 RUN if [ "$ARCH_VAR" = "amd64" ]; then ARCH_VAR=linux-x86_64; elif [ "$ARCH_VAR" = "arm64" ]; then ARCH_VAR=linux-aarch64; fi \
