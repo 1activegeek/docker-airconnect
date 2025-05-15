@@ -96,6 +96,7 @@ Unfortunately the base I use, has deprecated ARMv7 support. My only alternative 
 <br>
 
 # Changelog
+**2025-05-15:** Update to the s6 launch format. Thanks to [vandemjh](https://github.com/vandemjh) for the assist in refactoring this. Now IP changes should no longer crash or break the app and it follows the s6 format better and removes unnecessary supervisor. Also updated some GH workflows to enable PR deploy to DockerHub for testing. 
 **2024-07-15:** Large change to update to support for s6 v3 since v2 has been deprecated by upstream container image provider. Simplified launch scritp, simplified service files, easier separation of both services, less "stuff" overall. 
 **2023-10-21:** Package maintainer changed the release asset output, had to move from tarball to zip package. No major change should be experienced as the output is still the same. Also added link in docs to an ARMv7 repo for those using older devices stuck on ARMv7 release maintained by [sidevesh](https://github.com/sidevesh). <br>
 **2023-07-08:** The LS.io team has officially deprecated building ARMv7 base images. Had to deprecate this support as well. Attempted to comment out in case changes happen in the future to remedy this. <br>
