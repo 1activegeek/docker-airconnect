@@ -17,8 +17,8 @@ COPY /src /app
 RUN if [ "$ARCH_VAR" = "amd64" ]; then ARCH_VAR=linux-x86_64; elif [ "$ARCH_VAR" = "arm64" ]; then ARCH_VAR=linux-aarch64; fi \
     && curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep browser_download_url | cut -d '"' -f 4 | xargs curl -L -o airconnect.zip \
     && unzip airconnect.zip -d /tmp/ \
-    && mv /tmp/airupnp-$ARCH_VAR /usr/bin/airupnp-docker \
-    && mv /tmp/aircast-$ARCH_VAR /usr/bin/aircast-docker \
+    && mv /tmp/airupnp-$ARCH_VAR-static /usr/bin/airupnp-docker \
+    && mv /tmp/aircast-$ARCH_VAR-static /usr/bin/aircast-docker \
     && chmod +x /usr/bin/airupnp-docker \
     && chmod +x /usr/bin/aircast-docker \
     && rm -r /tmp/*
