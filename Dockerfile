@@ -21,6 +21,7 @@ RUN if [ "$ARCH_VAR" = "amd64" ]; then ARCH_VAR=linux-x86_64; elif [ "$ARCH_VAR"
     && mv /tmp/aircast-$ARCH_VAR /usr/bin/aircast-docker \
     && chmod +x /usr/bin/airupnp-docker \
     && chmod +x /usr/bin/aircast-docker \
-    && rm -r /tmp/*
+    && rm -r /tmp/* \
+    && rm airconnect.zip
 
 ENTRYPOINT ["/init"]
