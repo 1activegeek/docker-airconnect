@@ -24,3 +24,17 @@ jobs:
       - name: Build (validate only - no push)
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 --file ./Dockerfile .
+
+      # Save PR metadata as an artifact so the push workflow can read it.
+      # workflow_run events don't include PR info for fork PRs (GitHub security policy).
+      - name: Save PR metadata
+        run: |
+          mkdir -p /tmp/pr
+          echo "${{ github.event.pull_request.number }}" > /tmp/pr/number
+          echo "${{ github.event.pull_request.head.sha }}" > /tmp/pr/head_sha
+
+      - name: Upload PR metadata artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-metadata
+          path: /tmp/pr/
