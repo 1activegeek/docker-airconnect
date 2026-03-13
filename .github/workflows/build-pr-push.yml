@@ -7,10 +7,15 @@ on:
       - completed
 
 jobs:
-  build-push:
+  # Runs automatically after validate passes.
+  # Posts a pending commit status and PR comment with the approval link
+  # so everything is visible directly from the PR.
+  notify:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request_target'
     runs-on: ubuntu-latest
-    environment: dockerhub-test
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
 
     steps:
       - name: Get PR info
@@ -26,12 +31,46 @@ jobs:
             const pr = prs[0];
             core.setOutput('number', pr.number);
             core.setOutput('head_sha', context.payload.workflow_run.head_sha);
-            core.info(`PR #${pr.number} @ ${context.payload.workflow_run.head_sha}`);
 
+      - name: Set pending commit status on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.pr.outputs.head_sha }}',
+              state: 'pending',
+              target_url: runUrl,
+              description: 'Waiting for approval to push test image',
+              context: 'PR Build Push'
+            });
+
+      - name: Post PR comment with approval link
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const prNum = ${{ steps.pr.outputs.number }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNum,
+              body: `### 🐳 Test Image Ready for Approval\n\nBuild validation passed! Approve the test image push to publish \`1activegeek/airconnect:pr-${prNum}\` to DockerHub.\n\n**[➡ Approve here](${runUrl})**`
+            });
+
+  # Waits for environment approval before building and pushing.
+  build-push:
+    needs: [notify]
+    runs-on: ubuntu-latest
+    environment: dockerhub-test
+
+    steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.pr.outputs.head_sha }}
+          ref: ${{ needs.notify.outputs.head_sha }}
 
       - name: Setup qemu
         uses: docker/setup-qemu-action@v3
@@ -44,14 +83,14 @@ jobs:
         run: |
           DOCKER_IMAGE=1activegeek/airconnect
           VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
-          PR_NUM=${{ steps.pr.outputs.number }}
+          PR_NUM=${{ needs.notify.outputs.pr_number }}
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "buildx_args=--platform linux/amd64,linux/arm64 \
             --tag ${DOCKER_IMAGE}:pr-${PR_NUM}-${VERSION} \
             --tag ${DOCKER_IMAGE}:pr-${PR_NUM} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-            --build-arg VCS_REF=${{ steps.pr.outputs.head_sha }} \
+            --build-arg VCS_REF=${{ needs.notify.outputs.head_sha }} \
             --file ./Dockerfile ./" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
@@ -66,4 +105,33 @@ jobs:
 
       - name: Inspect Image
         run: |
-          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:pr-${{ steps.pr.outputs.number }}
+          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:pr-${{ needs.notify.outputs.pr_number }}
+
+      - name: Update commit status - success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNum = ${{ needs.notify.outputs.pr_number }};
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ needs.notify.outputs.head_sha }}',
+              state: 'success',
+              description: `Test image pushed: 1activegeek/airconnect:pr-${prNum}`,
+              context: 'PR Build Push'
+            });
+
+      - name: Update commit status - failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ needs.notify.outputs.head_sha }}',
+              state: 'failure',
+              description: 'Test image push failed',
+              context: 'PR Build Push'
+            });
