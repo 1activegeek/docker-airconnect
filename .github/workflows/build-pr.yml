@@ -1,0 +1,125 @@
+name: PR Build
+
+on:
+  pull_request_target:
+    branches:
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup qemu
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build (validate only - no push)
+        run: |
+          docker buildx build --platform linux/amd64,linux/arm64 --file ./Dockerfile .
+
+      - name: Comment on build failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.pull_request.number }},
+              body: `### ❌ Build Validation Failed\n\nThe multi-arch build failed. [View build logs](${runUrl}) for details.`
+            });
+
+      - name: Comment on build success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.pull_request.number }},
+              body: `### ✅ Build Validation Passed\n\nMulti-arch build succeeded. Approve the deployment to push \`1activegeek/airconnect:pr-${{ github.event.pull_request.number }}\` to DockerHub.\n\n**[➡ Approve here](${runUrl})**`
+            });
+
+  push:
+    needs: [validate]
+    runs-on: ubuntu-latest
+    environment: dockerhub-test
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup qemu
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare tags
+        id: prepare
+        run: |
+          DOCKER_IMAGE=1activegeek/airconnect
+          VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          PR_NUM=${{ github.event.pull_request.number }}
+          echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "buildx_args=--platform linux/amd64,linux/arm64 \
+            --tag ${DOCKER_IMAGE}:pr-${PR_NUM}-${VERSION} \
+            --tag ${DOCKER_IMAGE}:pr-${PR_NUM} \
+            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg VCS_REF=${{ github.event.pull_request.head.sha }} \
+            --file ./Dockerfile ./" >> $GITHUB_OUTPUT
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and Push
+        run: |
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
+
+      - name: Inspect Image
+        run: |
+          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:pr-${{ github.event.pull_request.number }}
+
+      - name: Comment on push success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNum = ${{ github.event.pull_request.number }};
+            const version = '${{ steps.prepare.outputs.version }}';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNum,
+              body: `### 🐳 Test Image Pushed to DockerHub\n\nImage is available for testing:\n\`\`\`\ndocker pull 1activegeek/airconnect:pr-${prNum}\ndocker pull 1activegeek/airconnect:pr-${prNum}-${version}\n\`\`\`\n\nMerge this PR when testing is complete.`
+            });
+
+      - name: Comment on push failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.pull_request.number }},
+              body: `### ❌ DockerHub Push Failed\n\nThe image build or push to DockerHub failed. [View logs](${runUrl}) for details.`
+            });
