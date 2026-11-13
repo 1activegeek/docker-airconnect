@@ -19,7 +19,7 @@ On GitHub: https://github.com/1activegeek/docker-airconnect
 
 This is a containerized build of the fantastics program by [philippe44](https://github.com/philippe44) called AirConnect. It allows you to be able to use AirPlay to push audio to Chromecast and UPNP based devices. There are some advanced details and information that you should review on his [GitHub Project](https://github.com/philippe44/AirConnect). For the most part this container needs nothing more than to launch it using Host networking.
 
-The main purpose for building this container over the others out there, is that this will always update to the latest version of the app as pulled from the original GitHub page. Currently there is another popular container that is not updated. This uses runtime scripting to ensure it will always pull the latest version of the binary before running - without intervention by me. It also uses the base image produced by the [LS.io team](https://github.com/linuxserver) to reduce footprint.
+The main purpose for building this container over the others out there, is that this will always update to the latest version of the app. The AirConnect binaries are compiled from source during the image build, using the latest code in the [AirConnect repository](https://github.com/tunlezah/AirConnect), so the image carries the newest fixes without waiting for a binary release to be published. It also uses the base image produced by the [LS.io team](https://github.com/linuxserver) to reduce footprint.
 
 Multi-arch support has been introduced, so there should be seamless use on AMD64, ARM64, and ARM devices.
 
@@ -49,6 +49,14 @@ If you would like to run a specific version of AirConnect, or revert to a previo
 
 `docker run -d --net=host 1activegeek/airconnect:1.0.8`
 
+### Building the image yourself
+
+The image builds AirConnect from source, so no pre-built binaries are needed. By default it uses the head of the `master` branch of https://github.com/tunlezah/AirConnect. Two build arguments let you change that:
+- `AIRCONNECT_REPO` The git repository to build AirConnect from
+- `AIRCONNECT_REF` The branch, tag or commit to build (default `master`)
+
+`docker build --build-arg AIRCONNECT_REF=<branch, tag or commit> -t airconnect .`
+
 I've introduced a secondary function as well in case you'd like to run the container with specifc runtime variables appended to the run config. This includes things such as the examples below in the troubleshooting section. It's purpose is more aimed at folks who'd like to use a custom configuration file for example, which requires running with `-x <name of file>` to be able to run this config.
 
 To utilize this, please use the following environment variables when you run the container:
@@ -60,21 +68,57 @@ If you do not wish to run both services and only need one, you can choose to kil
 
 ### Runtime Commands
 
+These are the options as of AirConnect 1.12.5.
+
+`airupnp` (Sonos and UPnP devices):
 ```
 Usage: [options]
-  -b < address>        network address to bind to
-  -c <mp3[:<rate>]|flc[:0..9]|wav>    audio format send to player
-  -x <config file>    read config from file (default is ./config.xml)
-  -i <config file>    discover players, save <config file> and exit
-  -I             auto save config at every network scan
-  -l <[rtp][:http][:f]>    RTP and HTTP latency (ms), ':f' forces silence fill
-  -r             let timing reference drift (no click)
-  -f <logfile>        Write debug to logfile
-  -p <pid file>        write PID in file
-  -d <log>=<level>    Set logging level, logs: all|raop|main|util|cast, level: error|warn|info|debug|sdebug
-  -Z             NOT interactive
-  -k             Immediate exit on SIGQUIT and SIGTERM
-  -t             License terms
+  -b <ip|iface>[:<port>] network interface or interface and UPnP port to use
+  -a <port>[:<count>]    set inbound port and range for RTP and HTTP
+  -c <mp3[:<rate>]|aac[:<rate>]|flac[:0..9][/1152...16384]|wav|pcm>  audio format send to player
+  -g <-3|-1|0>           HTTP content-length mode (-3:chunked, -1:none, 0:fixed)
+  -S <broadcast|track|radio>  how a Sonos is told to present the stream (default broadcast)
+  -u <version>           set the maximum UPnP version for search (default 1)
+  -x <config file>       read config from file (default is ./config.xml)
+  -i <config file>       discover players, save <config file> and exit
+  -I                     auto save config at every network scan
+  -l <[rtp][:http][:f]>  RTP and HTTP latency (ms), ':f' forces silence fill
+  -r                     let timing reference drift (no click)
+  -f <logfile>           write debug to logfile
+  -p <pid file>          write PID in file
+  -N <format>            transform device name using C format (%s=name)
+  -m <n1,n2...>          exclude devices whose model include tokens
+  -n <m1,m2,...>         exclude devices whose name includes tokens
+  -o <m1,m2,...>         include only listed models; overrides -m and -n (use <NULL> if player don't return a model)
+  -d <log>=<level>       set logging level, logs: all|raop|main|util|upnp, level: error|warn|info|debug|sdebug
+  -z                     daemonize
+  -Z                     NOT interactive
+  -k                     immediate exit on SIGQUIT and SIGTERM
+  -t                     license terms
+  --noflush              ignore flush command (wait for teardown to stop)
+```
+
+`aircast` (Chromecast devices):
+```
+Usage: [options]
+  -b <ip|iface>         network address or interface to bind to
+  -a <port>[:<count>]   set inbound port and range for RTP and HTTP
+  -c <mp3[:<rate>]|aac[:<rate>]|flac[:0..9][/1152...16384]|wav>  audio format send to player
+  -v <0..1>             group MediaVolume factor
+  -x <config file>      read config from file (default is ./config.xml)
+  -i <config file>      discover players, save <config file> and exit
+  -I                    auto save config at every network scan
+  -N <format>           transform device name using C format (%s=name)
+  -l <[rtp][:http][:f]> RTP and HTTP latency (ms), ':f' forces silence fill
+  -r                    let timing reference drift (no click)
+  -f <logfile>          write debug to logfile
+  -p <pid file>         write PID in file
+  -d <log>=<level>      set logging level, logs: all|raop|main|util|cast, level: error|warn|info|debug|sdebug
+  -z                    daemonize
+  -Z                    NOT interactive
+  -k                    immediate exit on SIGQUIT and SIGTERM
+  -t                    license terms
+  --noflush             ignore flush command (wait for teardown to stop)
 ```
 
 # Troubleshooting
@@ -83,11 +127,11 @@ If you need to attempt to dig into troubleshooting and see the logs realtime in 
 
 `docker exec -it <name of container> bash`
 
-Once inside the container, you can use standard config options to run the app as outlined by the creator. The app is located in the `/bin` directory. Both the UPNP and Cast versions of the file are being run in this container. (sub your platform below if not running x86-64 - arm64 = aarch64, arm = arm).
+Once inside the container, you can use standard config options to run the app as outlined by the creator. The app is located in the `/usr/bin` directory as `aircast-docker` and `airupnp-docker`. Both the UPNP and Cast versions of the file are being run in this container.
 
-`./aircast-x86-64 --h` - will provide you a list of commands that can be run via the app
+`aircast-docker -h` - will provide you a list of commands that can be run via the app
 
-`./aircast-x86-64 -d all=debug` - will run the app and output a debug based log in an interactive mode
+`aircast-docker -d all=debug` - will run the app and output a debug based log in an interactive mode
 
 If you perform any realtime testing, it is suggested to completely restart the container after testing to be sure there are no incompatibilities that arise with running it in daemon mode while also running it interactively.
 
@@ -96,6 +140,7 @@ Unfortunately the base I use, has deprecated ARMv7 support. My only alternative 
 <br>
 
 # Changelog
+**2026-11-13:** AirConnect is now compiled from source during the image build instead of downloading the published release zip, which brings the image up to AirConnect 1.12.5. The source comes from https://github.com/tunlezah/AirConnect and can be changed with the `AIRCONNECT_REPO`/`AIRCONNECT_REF` build arguments. Image version tags now follow the version found in the source. <br>
 **2025-05-15:** Update to the s6 launch format. Thanks to [vandemjh](https://github.com/vandemjh) for the assist in refactoring this. Now IP changes should no longer crash or break the app and it follows the s6 format better and removes unnecessary supervisor. Also updated some GH workflows to enable PR deploy to DockerHub for testing. 
 **2024-07-15:** Large change to update to support for s6 v3 since v2 has been deprecated by upstream container image provider. Simplified launch scritp, simplified service files, easier separation of both services, less "stuff" overall. 
 **2023-10-21:** Package maintainer changed the release asset output, had to move from tarball to zip package. No major change should be experienced as the output is still the same. Also added link in docs to an ARMv7 repo for those using older devices stuck on ARMv7 release maintained by [sidevesh](https://github.com/sidevesh). <br>
