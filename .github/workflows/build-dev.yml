@@ -26,13 +26,18 @@ jobs:
           DOCKER_IMAGE=1activegeek/airconnect
           DOCKER_PLATFORMS=linux/amd64,linux/arm64
           # linux/arm/v7 removed as deprecated by ls.io
-          VERSION=$(curl -s https://api.github.com/repos/philippe44/AirConnect/releases/latest | grep tag_name | cut -d '"' -f 4)
+          AIRCONNECT_REPO=tunlezah/AirConnect
+          # Pin the build to the current head of the AirConnect source and read its version
+          AIRCONNECT_REF=$(git ls-remote https://github.com/${AIRCONNECT_REPO}.git refs/heads/master | cut -f 1)
+          VERSION=$(curl -fsSL https://raw.githubusercontent.com/${AIRCONNECT_REPO}/${AIRCONNECT_REF}/airupnp/src/airupnp.h | sed -n 's/^#define VERSION "v\([0-9.]*\).*/\1/p')
+          if [ -z "$AIRCONNECT_REF" ] || [ -z "$VERSION" ]; then echo "Unable to determine AirConnect source version" && exit 1; fi
           TAGS="--tag ${DOCKER_IMAGE}:dev-${VERSION} --tag ${DOCKER_IMAGE}:dev"
           
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "buildx_args=--platform ${DOCKER_PLATFORMS} \
             --build-arg VERSION=${VERSION} \
+            --build-arg AIRCONNECT_REF=${AIRCONNECT_REF} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
             ${TAGS} --file ./Dockerfile ./" >> $GITHUB_OUTPUT
